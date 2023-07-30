@@ -27,7 +27,7 @@ jobs:
 
       - name: Install dependencies
         run: |
-          git config --global user.email "acr@antoniocarlosribeiro.com"; git config --global user.name "Antonio Ribeiro"
+          git config --global user.email "hansenmakangiras@gmail.com"; git config --global user.name "Hansen Makangiras"
 
       - name: Install dependencies
         run: |

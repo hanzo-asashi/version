@@ -129,7 +129,7 @@ class ServiceProvider extends IlluminateServiceProvider
         Blade::directive(
             $this->config->get('blade-directive', 'version'),
             function ($format = Constants::DEFAULT_FORMAT) {
-                return "<?php echo app('pragmarx.version')->format($format); ?>";
+                return "<?php echo app('pinixel.version')->format($format); ?>";
             }
         );
     }

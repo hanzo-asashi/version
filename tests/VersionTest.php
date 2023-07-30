@@ -1,27 +1,27 @@
 <?php
 
-namespace PragmaRX\Version\Tests;
+namespace Pinixel\Version\Tests;
 
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Blade;
 use PragmaRX\Version\Package\Exceptions\GitTagNotFound;
 use PragmaRX\Version\Package\Exceptions\MethodNotFound;
-use PragmaRX\Version\Package\Facade as VersionFacade;
-use PragmaRX\Version\Package\Support\Constants;
-use PragmaRX\Version\Package\Version;
-use PragmaRX\Version\Package\Version as VersionService;
+use Pinixel\Version\Package\Facade as VersionFacade;
+use Pinixel\Version\Package\Support\Constants;
+use Pinixel\Version\Package\Version;
+use Pinixel\Version\Package\Version as VersionService;
 
 class VersionTest extends TestCase
 {
     const ABSORB_VERSION = '1.5.12';
 
-    const currentVersion = '1.0.0';
+    const CURRENT_VERSION = '1.0.0';
 
     /**
      * @var VersionService
      */
-    protected $version;
+    protected VersionService $version;
 
     public static $gitVersion;
 
@@ -74,19 +74,19 @@ class VersionTest extends TestCase
         $this->retrieveRemoteVersion();
     }
 
-    protected function dropAllGitTags()
+    protected function dropAllGitTags(): void
     {
         chdir(base_path());
 
         exec('git tag | xargs git tag -d');
     }
 
-    protected function getBuild()
+    protected function getBuild(): string
     {
         return substr(exec('git rev-parse --verify HEAD'), 0, 6);
     }
 
-    protected function retrieveRemoteVersion()
+    protected function retrieveRemoteVersion(): string
     {
         if (isset(static::$remoteVersion)) {
             return static::$remoteVersion;
@@ -101,7 +101,7 @@ class VersionTest extends TestCase
         );
     }
 
-    protected function removeGitTag()
+    protected function removeGitTag(): void
     {
         chdir(base_path());
 
@@ -130,7 +130,7 @@ class VersionTest extends TestCase
         $this->assertEquals($this->getFormattedVersion('version %s.%s.%s (commit %s)'), $this->version->current());
     }
 
-    public function getFormattedVersion($format)
+    public function getFormattedVersion($format): string
     {
         return sprintf(
             $format,

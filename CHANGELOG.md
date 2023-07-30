@@ -1,5 +1,9 @@
 # Changelog
 
+## [1.0.2] - 2023-07-30
+### Added
+- Support Laravel 10
+
 ## [1.0.1] - 2019-09-17
 ### Added
 - Fire events for some changes and updates. Please check the file `src/package/Support/Constants.php`

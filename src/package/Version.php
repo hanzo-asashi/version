@@ -2,6 +2,7 @@
 
 namespace Pinixel\Version\Package;
 
+use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 use Pinixel\Version\Package\Support\Absorb;
 use Pinixel\Version\Package\Support\Config;
@@ -171,7 +172,7 @@ class Version
      *
      * @param $instance  object
      * @param $property  string
-     * @param $class     string
+     * @param $class     string|null
      *
      * @return Yaml|object
      */
@@ -247,7 +248,7 @@ class Version
      *
      * @return string
      */
-    public function current()
+    public function current(): string
     {
         return $this->replaceVariables($this->config->get('format.version'));
     }
@@ -257,7 +258,7 @@ class Version
      *
      * @return $this
      */
-    public function instance()
+    public function instance(): static
     {
         return $this;
     }
@@ -269,7 +270,7 @@ class Version
      *
      * @return mixed|null
      */
-    public function format($type = null)
+    public function format($type = null): mixed
     {
         $type = $type ?: Constants::DEFAULT_FORMAT;
 
@@ -285,7 +286,7 @@ class Version
      *
      * @return bool
      */
-    public function isInAbsorbMode()
+    public function isInAbsorbMode(): bool
     {
         return $this->isVersionInAbsorbMode() ||
             $this->isBuildInAbsorbMode() ||
@@ -299,7 +300,7 @@ class Version
      *
      * @return bool
      */
-    public function isVersionInAbsorbMode()
+    public function isVersionInAbsorbMode(): bool
     {
         return $this->config->get('mode') == Constants::MODE_ABSORB;
     }
@@ -311,7 +312,7 @@ class Version
      *
      * @return bool
      */
-    public function isBuildInAbsorbMode()
+    public function isBuildInAbsorbMode(): bool
     {
         return $this->config->get('commit.mode') == Constants::MODE_ABSORB;
     }
@@ -323,7 +324,7 @@ class Version
      *
      * @return bool
      */
-    public function isTimestampInAbsorbMode()
+    public function isTimestampInAbsorbMode(): bool
     {
         return $this->config->get('current.timestamp.mode') == Constants::MODE_ABSORB;
     }
@@ -331,9 +332,9 @@ class Version
     /**
      * Set the config file stub.
      *
-     * @param string $configFileStub
+     * @param  string  $configFileStub
      */
-    public function setConfigFileStub($configFileStub)
+    public function setConfigFileStub(string $configFileStub): void
     {
         $this->config->setConfigFileStub($configFileStub);
     }
@@ -343,9 +344,9 @@ class Version
      *
      * @param $path
      *
-     * @return \Illuminate\Support\Collection
+     * @return Collection
      */
-    public function loadConfig($path = null)
+    public function loadConfig($path = null): Collection
     {
         return $this->config->loadConfig($path);
     }
