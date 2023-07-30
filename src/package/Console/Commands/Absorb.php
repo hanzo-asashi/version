@@ -1,6 +1,6 @@
 <?php
 
-namespace PragmaRX\Version\Package\Console\Commands;
+namespace Pinixel\Version\Package\Console\Commands;
 
 class Absorb extends Base
 {
@@ -20,8 +20,9 @@ class Absorb extends Base
 
     /**
      * Execute the console command.
+     * @throws \Exception
      */
-    public function handle()
+    public function handle(): void
     {
         if (!$this->isInAbsorbMode()) {
             $this->error('Not in absorb mode, please edit your config file.');
@@ -30,7 +31,7 @@ class Absorb extends Base
         }
 
         try {
-            app('pragmarx.version')->absorb();
+            app('pinixel.version')->absorb();
 
             $this->info('Version was absorbed.');
         } catch (\Exception $exception) {
@@ -49,6 +50,6 @@ class Absorb extends Base
      */
     protected function isInAbsorbMode(): bool
     {
-        return app('pragmarx.version')->isInAbsorbMode();
+        return app('pinixel.version')->isInAbsorbMode();
     }
 }

@@ -1,6 +1,6 @@
 <?php
 
-namespace PragmaRX\Version\Package\Console\Commands;
+namespace Pinixel\Version\Package\Console\Commands;
 
 class Patch extends Base
 {
@@ -21,10 +21,10 @@ class Patch extends Base
     /**
      * Execute the console command.
      */
-    public function handle()
+    public function handle(): void
     {
         if ($this->checkIfCanIncrement('current', 'version')) {
-            $number = app('pragmarx.version')->incrementPatch();
+            $number = app('pinixel.version')->incrementPatch();
 
             $this->info("New patch: {$number}");
 

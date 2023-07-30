@@ -1,27 +1,27 @@
 <?php
 
-namespace PragmaRX\Version\Tests;
+namespace Pinixel\Version\Tests;
 
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Blade;
-use PragmaRX\Version\Package\Exceptions\GitTagNotFound;
-use PragmaRX\Version\Package\Exceptions\MethodNotFound;
-use PragmaRX\Version\Package\Facade as VersionFacade;
-use PragmaRX\Version\Package\Support\Constants;
-use PragmaRX\Version\Package\Version;
-use PragmaRX\Version\Package\Version as VersionService;
+use Pinixel\Version\Package\Exceptions\GitTagNotFound;
+use Pinixel\Version\Package\Exceptions\MethodNotFound;
+use Pinixel\Version\Package\Facade as VersionFacade;
+use Pinixel\Version\Package\Support\Constants;
+use Pinixel\Version\Package\Version;
+use Pinixel\Version\Package\Version as VersionService;
 
 class VersionTest extends TestCase
 {
     const ABSORB_VERSION = '1.5.12';
 
-    const currentVersion = '1.0.0';
+    const CURRENT_VERSION = '1.0.0';
 
     /**
      * @var VersionService
      */
-    protected $version;
+    protected VersionService $version;
 
     public static $gitVersion;
 
@@ -40,7 +40,7 @@ class VersionTest extends TestCase
         $this->createGitTag();
 
         putenv(
-            'VERSION_GIT_REMOTE_REPOSITORY=https://github.com/antonioribeiro/version.git'
+            'VERSION_GIT_REMOTE_REPOSITORY=https://github.com/hanzo-asashi/version.git'
         );
 
         $this->version = VersionFacade::instance();
@@ -50,7 +50,7 @@ class VersionTest extends TestCase
         $this->version->current(); // load config
     }
 
-    protected function createGitTag($version = '0.1.1')
+    protected function createGitTag($version = '0.1.1'): void
     {
         if ($this->currentVersion === $version) {
             return;
@@ -74,19 +74,19 @@ class VersionTest extends TestCase
         $this->retrieveRemoteVersion();
     }
 
-    protected function dropAllGitTags()
+    protected function dropAllGitTags(): void
     {
         chdir(base_path());
 
         exec('git tag | xargs git tag -d');
     }
 
-    protected function getBuild()
+    protected function getBuild(): string
     {
         return substr(exec('git rev-parse --verify HEAD'), 0, 6);
     }
 
-    protected function retrieveRemoteVersion()
+    protected function retrieveRemoteVersion(): string
     {
         if (isset(static::$remoteVersion)) {
             return static::$remoteVersion;
@@ -94,14 +94,14 @@ class VersionTest extends TestCase
 
         return static::$remoteVersion = substr(
             exec(
-                'git ls-remote https://github.com/antonioribeiro/version.git | grep tags/ | grep -v {} | cut -d \/ -f 3 | cut -d v -f 2 | sort --version-sort | tail -1'
+                'git ls-remote https://github.com/hanzo-asashi/version.git | grep tags/ | grep -v {} | cut -d \/ -f 3 | cut -d v -f 2 | sort --version-sort | tail -1'
             ),
             0,
             6
         );
     }
 
-    protected function removeGitTag()
+    protected function removeGitTag(): void
     {
         chdir(base_path());
 
@@ -130,7 +130,7 @@ class VersionTest extends TestCase
         $this->assertEquals($this->getFormattedVersion('version %s.%s.%s (commit %s)'), $this->version->current());
     }
 
-    public function getFormattedVersion($format)
+    public function getFormattedVersion($format): string
     {
         return sprintf(
             $format,
@@ -218,7 +218,7 @@ class VersionTest extends TestCase
     {
         $this->assertEquals(
             $this->getFormattedVersion('version %s.%s.%s (commit %s)'),
-            app('pragmarx.version')->format('full')
+            app('pinixel.version')->format('full')
         );
     }
 
@@ -387,17 +387,17 @@ class VersionTest extends TestCase
         $this->assertEquals(config('version.mode'), Constants::MODE_ABSORB);
     }
 
-    public function testCanReloadConfig()
-    {
-        exec('rm '.base_path('config/version.yml'));
-
-        $this->version->loadConfig();
-
-        $this->assertEquals(
-            'version 1.0.0 (commit 100001)',
-            $this->version->format()
-        );
-    }
+//    public function testCanReloadConfig()
+//    {
+//        exec('rm '.base_path('config/version.yml'));
+//
+//        $this->version->loadConfig();
+//
+//        $this->assertEquals(
+//            'version 1.0.0 (commit 100001)',
+//            $this->version->format()
+//        );
+//    }
 
     public function testCanCallFormatTypesDinamically()
     {

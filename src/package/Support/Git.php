@@ -1,14 +1,14 @@
 <?php
 
-namespace PragmaRX\Version\Package\Support;
+namespace Pinixel\Version\Package\Support;
 
 use Exception;
-use PragmaRX\Version\Package\Exceptions\GitTagNotFound;
+use Pinixel\Version\Package\Exceptions\GitTagNotFound;
 use Symfony\Component\Process\Process;
 
 class Git
 {
-    protected $config;
+    protected ?Config $config;
 
     /**
      * Git constructor.
@@ -20,7 +20,7 @@ class Git
         $this->config = $config;
     }
 
-    private function cleanOutput($getOutput)
+    private function cleanOutput($getOutput): string
     {
         return trim(str_replace("\n", '', $getOutput));
     }
@@ -34,7 +34,7 @@ class Git
      *
      * @return array
      */
-    public function extractVersion($string)
+    public function extractVersion($string): array
     {
         preg_match_all(
             $this->config->get('git.version.matcher'),
@@ -52,7 +52,7 @@ class Git
     /**
      * @return \Illuminate\Config\Repository|mixed
      */
-    private function getCommitLength()
+    private function getCommitLength(): mixed
     {
         return $this->config->get('commit.length', 6);
     }
@@ -62,7 +62,7 @@ class Git
      *
      * @return string
      */
-    public function getGitRepository()
+    public function getGitRepository(): string
     {
         return $this->config->get('git.repository');
     }
@@ -70,11 +70,11 @@ class Git
     /**
      * Make a git version command.
      *
-     * @param string|null $from
+     * @param  string|null  $from
      *
      * @return string
      */
-    public function makeGitVersionRetrieverCommand($from = null)
+    public function makeGitVersionRetrieverCommand(string $from = null): string
     {
         return $this->searchAndReplaceRepository(
             $this->config->get('git.version.'.$this->getFrom($from))
@@ -84,11 +84,11 @@ class Git
     /**
      * Get the current git commit number, to be used as commit number.
      *
-     * @param string|null $from
+     * @param  string|null  $from
      *
      * @return string
      */
-    public function getCommit($from = null)
+    public function getCommit(string $from = null): bool|string|null
     {
         return $this->getFromGit(
             $this->makeGitCommitRetrieverCommand($from),
@@ -99,11 +99,11 @@ class Git
     /**
      * Get the current git date and time.
      *
-     * @param string|null $from
+     * @param  string|null  $from
      *
      * @return string
      */
-    public function getTimestamp($from = null)
+    public function getTimestamp(string|null $from = null): bool|string|null
     {
         return $this->getFromGit(
             $this->makeGitTimestampRetrieverCommand($from)
@@ -113,11 +113,11 @@ class Git
     /**
      * Get the git hash retriever command.
      *
-     * @param string|null $from
+     * @param  string|null  $from
      *
      * @return \Illuminate\Config\Repository|mixed
      */
-    public function getGitCommitRetrieverCommand($from = null)
+    public function getGitCommitRetrieverCommand(string|null $from = null)
     {
         return $this->config->get('git.commit.'.$this->getFrom($from));
     }
@@ -130,11 +130,11 @@ class Git
     /**
      * Get the git date retriever command.
      *
-     * @param string|null $from
+     * @param  string|null  $from
      *
      * @return \Illuminate\Config\Repository|mixed
      */
-    public function getGitTimestampRetrieverCommand($from = null)
+    public function getGitTimestampRetrieverCommand(string|null $from = null)
     {
         return $this->config->get('git.date.'.$this->getFrom($from));
     }
@@ -144,11 +144,12 @@ class Git
      *
      * @param $command
      * @param $keySuffix
-     * @param int $length
+     * @param  int  $length
      *
      * @return bool|mixed|null|string
+     * @throws Exception
      */
-    protected function getFromGit($command, $length = 256)
+    protected function getFromGit($command, int $length = 256): mixed
     {
         return substr($this->shell($command), 0, $length);
     }
@@ -156,11 +157,12 @@ class Git
     /**
      * Get the current app version from Git.
      *
-     * @param null $from
+     * @param  null  $from
      *
      * @return bool|mixed|null|string
+     * @throws Exception
      */
-    public function getVersion($from = null)
+    public function getVersion($from = null): mixed
     {
         return $this->getFromGit(
             $this->makeGitVersionRetrieverCommand($from)
@@ -169,12 +171,12 @@ class Git
 
     /**
      * @param $matches
-     *
+     * @param $index
      * @return null
      */
     private function getMatchedVersionItem($matches, $index)
     {
-        return isset($matches[$index][0]) ? $matches[$index][0] : null;
+        return $matches[$index][0] ?? null;
     }
 
     /**
@@ -195,7 +197,7 @@ class Git
      *
      * @return mixed
      */
-    public function makeGitCommitRetrieverCommand($from)
+    public function makeGitCommitRetrieverCommand($from): mixed
     {
         return $this->searchAndReplaceRepository(
             $this->getGitCommitRetrieverCommand($from)
@@ -209,7 +211,7 @@ class Git
      *
      * @return mixed
      */
-    public function makeGitTimestampRetrieverCommand($from)
+    public function makeGitTimestampRetrieverCommand($from): mixed
     {
         return $this->searchAndReplaceRepository(
             $this->getGitTimestampRetrieverCommand($from)
@@ -223,7 +225,7 @@ class Git
      *
      * @return mixed
      */
-    public function searchAndReplaceRepository($string)
+    public function searchAndReplaceRepository($string): mixed
     {
         return str_replace('{$repository}', $this->getGitRepository(), $string);
     }
@@ -237,7 +239,7 @@ class Git
      *
      * @return string
      */
-    protected function shell($command)
+    protected function shell($command): string
     {
         $process = Process::fromShellCommandline($command, $this->getBasePath());
 
@@ -255,7 +257,7 @@ class Git
      *
      * @return string
      */
-    public function getBasePath()
+    public function getBasePath(): string
     {
         return base_path();
     }

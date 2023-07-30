@@ -1,6 +1,6 @@
 <?php
 
-namespace PragmaRX\Version\Package\Console\Commands;
+namespace Pinixel\Version\Package\Console\Commands;
 
 class Major extends Base
 {
@@ -21,10 +21,10 @@ class Major extends Base
     /**
      * Execute the console command.
      */
-    public function handle()
+    public function handle(): void
     {
         if ($this->checkIfCanIncrement('current', 'version')) {
-            $number = app('pragmarx.version')->incrementMajor();
+            $number = app('pinixel.version')->incrementMajor();
 
             $this->info("New major version: {$number}");
 

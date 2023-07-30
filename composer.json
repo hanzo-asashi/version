@@ -1,5 +1,5 @@
 {
-    "name": "pragmarx/version",
+    "name": "pinixel/version",
     "description": "Take control over your Laravel app version",
     "keywords": [
         "laravel",
@@ -9,35 +9,35 @@
     "license": "MIT",
     "authors": [
         {
-            "name": "Antonio Carlos Ribeiro",
-            "email": "acr@antoniocarlosribeiro.com",
-            "role": "Creator & Designer"
+            "name": "Hansen Makangiras",
+            "email": "hansenmakangiras@gmail.com",
+            "role": "Web Developer"
         }
     ],
     "require": {
-        "php": ">=7.0",
-        "laravel/framework": ">=5.5.33",
+        "php": ">=8.1",
+        "laravel/framework": ">=9.0",
         "pragmarx/yaml": "^1.0",
-        "symfony/process": "^3.3|^4.0|^5.0"
+        "symfony/process": "^3.3|^4.0|^5.0|^6.0"
     },
     "require-dev": {
-        "phpunit/phpunit": "~5|~6|~7|~8|~9",
-        "orchestra/testbench": "3.4.*|3.5.*|3.6.*|3.7.*|4.*|5.*|6.*"
+        "phpunit/phpunit": "~5|~6|~7|~8|~9|~10",
+        "orchestra/testbench": "3.4.*|3.5.*|3.6.*|3.7.*|4.*|5.*|6.*|7.*|8.*"
     },
     "autoload": {
         "psr-4": {
-            "PragmaRX\\Version\\Package\\": "src/package",
-            "PragmaRX\\Version\\Tests\\": "tests/"
+            "Pinixel\\Version\\Package\\": "src/package",
+            "Pinixel\\Version\\Tests\\": "tests/"
         }
     },
     "extra": {
         "component": "package",
         "laravel": {
             "providers": [
-                "PragmaRX\\Version\\Package\\ServiceProvider"
+                "Pinixel\\Version\\Package\\ServiceProvider"
             ],
             "aliases": {
-                "Version": "PragmaRX\\Version\\Package\\Facade"
+                "Version": "Pinixel\\Version\\Package\\Facade"
             }
         }
     },

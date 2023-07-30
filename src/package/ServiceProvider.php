@@ -1,19 +1,19 @@
 <?php
 
-namespace PragmaRX\Version\Package;
+namespace Pinixel\Version\Package;
 
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\ServiceProvider as IlluminateServiceProvider;
-use PragmaRX\Version\Package\Console\Commands\Absorb;
-use PragmaRX\Version\Package\Console\Commands\Commit;
-use PragmaRX\Version\Package\Console\Commands\Major;
-use PragmaRX\Version\Package\Console\Commands\Minor;
-use PragmaRX\Version\Package\Console\Commands\Patch;
-use PragmaRX\Version\Package\Console\Commands\Show;
-use PragmaRX\Version\Package\Console\Commands\Timestamp;
-use PragmaRX\Version\Package\Console\Commands\Version as VersionCommand;
-use PragmaRX\Version\Package\Support\Config;
-use PragmaRX\Version\Package\Support\Constants;
+use Pinixel\Version\Package\Console\Commands\Absorb;
+use Pinixel\Version\Package\Console\Commands\Commit;
+use Pinixel\Version\Package\Console\Commands\Major;
+use Pinixel\Version\Package\Console\Commands\Minor;
+use Pinixel\Version\Package\Console\Commands\Patch;
+use Pinixel\Version\Package\Console\Commands\Show;
+use Pinixel\Version\Package\Console\Commands\Timestamp;
+use Pinixel\Version\Package\Console\Commands\Version as VersionCommand;
+use Pinixel\Version\Package\Support\Config;
+use Pinixel\Version\Package\Support\Constants;
 use PragmaRX\Yaml\Package\Yaml;
 
 class ServiceProvider extends IlluminateServiceProvider
@@ -23,42 +23,42 @@ class ServiceProvider extends IlluminateServiceProvider
      *
      * @var bool
      */
-    protected $defer = false;
+    protected bool $defer = false;
 
     /**
      * The package config.
      *
      * @var Config
      */
-    protected $config;
+    protected Config $config;
 
     /**
      * Console commands to be instantiated.
      *
      * @var array
      */
-    protected $commandList = [
-        'pragmarx.version.command' => VersionCommand::class,
+    protected array $commandList = [
+        'pinixel.version.command' => VersionCommand::class,
 
-        'pragmarx.version.commit.command' => Commit::class,
+        'pinixel.version.commit.command' => Commit::class,
 
-        'pragmarx.version.show.command' => Show::class,
+        'pinixel.version.show.command' => Show::class,
 
-        'pragmarx.version.major.command' => Major::class,
+        'pinixel.version.major.command' => Major::class,
 
-        'pragmarx.version.minor.command' => Minor::class,
+        'pinixel.version.minor.command' => Minor::class,
 
-        'pragmarx.version.patch.command' => Patch::class,
+        'pinixel.version.patch.command' => Patch::class,
 
-        'pragmarx.version.absorb.command' => Absorb::class,
+        'pinixel.version.absorb.command' => Absorb::class,
 
-        'pragmarx.version.absorb.timestamp' => Timestamp::class,
+        'pinixel.version.absorb.timestamp' => Timestamp::class,
     ];
 
     /**
      * Boot Service Provider.
      */
-    public function boot()
+    public function boot(): void
     {
         $this->publishConfiguration();
 
@@ -70,7 +70,7 @@ class ServiceProvider extends IlluminateServiceProvider
      *
      * @return string
      */
-    protected function getConfigFile()
+    protected function getConfigFile(): string
     {
         return config_path('version.yml');
     }
@@ -80,7 +80,7 @@ class ServiceProvider extends IlluminateServiceProvider
      *
      * @return string
      */
-    protected function getConfigFileStub()
+    protected function getConfigFileStub(): string
     {
         return __DIR__.'/../config/version.yml';
     }
@@ -88,7 +88,7 @@ class ServiceProvider extends IlluminateServiceProvider
     /**
      * Load config.
      */
-    protected function loadConfig()
+    protected function loadConfig(): void
     {
         $this->config = new Config(new Yaml());
 
@@ -100,7 +100,7 @@ class ServiceProvider extends IlluminateServiceProvider
     /**
      * Configure config path.
      */
-    protected function publishConfiguration()
+    protected function publishConfiguration(): void
     {
         $this->publishes([
             $this->getConfigFileStub() => $this->getConfigFile(),
@@ -112,7 +112,7 @@ class ServiceProvider extends IlluminateServiceProvider
      *
      * @return void
      */
-    public function register()
+    public function register(): void
     {
         $this->registerService();
 
@@ -124,12 +124,12 @@ class ServiceProvider extends IlluminateServiceProvider
     /**
      * Register Blade directives.
      */
-    protected function registerBlade()
+    protected function registerBlade(): void
     {
         Blade::directive(
             $this->config->get('blade-directive', 'version'),
             function ($format = Constants::DEFAULT_FORMAT) {
-                return "<?php echo app('pragmarx.version')->format($format); ?>";
+                return "<?php echo app('pinixel.version')->format($format); ?>";
             }
         );
     }
@@ -140,7 +140,7 @@ class ServiceProvider extends IlluminateServiceProvider
      * @param $name
      * @param $commandClass string
      */
-    protected function registerCommand($name, $commandClass)
+    protected function registerCommand($name, string $commandClass): void
     {
         $this->app->singleton($name, function () use ($commandClass) {
             return new $commandClass();
@@ -152,7 +152,7 @@ class ServiceProvider extends IlluminateServiceProvider
     /**
      * Register Artisan commands.
      */
-    protected function registerCommands()
+    protected function registerCommands(): void
     {
         collect($this->commandList)->each(function ($commandClass, $key) {
             $this->registerCommand($key, $commandClass);
@@ -162,9 +162,9 @@ class ServiceProvider extends IlluminateServiceProvider
     /**
      * Register service service.
      */
-    protected function registerService()
+    protected function registerService(): void
     {
-        $this->app->singleton('pragmarx.version', function () {
+        $this->app->singleton('pinixel.version', function () {
             $version = new Version($this->config);
 
             $version->setConfigFileStub($this->getConfigFileStub());

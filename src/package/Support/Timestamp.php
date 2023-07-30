@@ -1,12 +1,12 @@
 <?php
 
-namespace PragmaRX\Version\Package\Support;
+namespace Pinixel\Version\Package\Support;
 
 use Carbon\Carbon;
 
 class Timestamp
 {
-    protected $config;
+    protected Config $config;
 
     /**
      * Cache constructor.
@@ -26,7 +26,7 @@ class Timestamp
      *
      * @return string
      */
-    public function timestampToConfig()
+    public function timestampToConfig(): string
     {
         $config = $this->config->getRoot();
 
@@ -39,7 +39,7 @@ class Timestamp
         return (string) $timestamp;
     }
 
-    public function explode($date)
+    public function explode($date): array
     {
         return [
             'year'     => $date->year,

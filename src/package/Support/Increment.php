@@ -1,12 +1,12 @@
 <?php
 
-namespace PragmaRX\Version\Package\Support;
+namespace Pinixel\Version\Package\Support;
 
 use Illuminate\Support\Arr;
 
 class Increment
 {
-    protected $config;
+    protected Config $config;
 
     /**
      * Cache constructor.
@@ -26,7 +26,7 @@ class Increment
      *
      * @return string
      */
-    public function increment(\Closure $incrementer, $returnKey)
+    public function increment(\Closure $incrementer, $returnKey): string
     {
         $config = $incrementer($this->config->getRoot());
 
@@ -44,12 +44,12 @@ class Increment
      *
      * @internal param null $increment
      */
-    public function incrementCommit($by = null)
+    public function incrementCommit($by = null): int|string
     {
         $result = $this->increment(function ($config) use ($by) {
-            $increment_by = $by ?: $config['commit']['increment-by'];
+            $incrementBy = $by ?: $config['commit']['increment-by'];
 
-            $config['current']['commit'] = $this->incrementHex($config['current']['commit'], $increment_by);
+            $config['current']['commit'] = $this->incrementHex($config['current']['commit'], $incrementBy);
 
             return $config;
         }, 'commit.number');
@@ -64,7 +64,7 @@ class Increment
      *
      * @return int
      */
-    public function incrementMajor()
+    public function incrementMajor(): int|string
     {
         $result = $this->increment(function ($config) {
             $config['current']['major']++;
@@ -86,7 +86,7 @@ class Increment
      *
      * @return int
      */
-    public function incrementMinor()
+    public function incrementMinor(): int|string
     {
         $result = $this->increment(function ($config) {
             $config['current']['minor']++;
@@ -106,7 +106,7 @@ class Increment
      *
      * @return int
      */
-    public function incrementPatch()
+    public function incrementPatch(): int|string
     {
         $result = $this->increment(function ($config) {
             $config['current']['patch']++;
@@ -119,7 +119,7 @@ class Increment
         return $result;
     }
 
-    public function incrementHex($hex, $by = 1)
+    public function incrementHex($hex, $by = 1): string
     {
         return dechex(hexdec($hex) + $by);
     }

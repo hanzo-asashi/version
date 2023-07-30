@@ -1,37 +1,40 @@
 <?php
 
-namespace PragmaRX\Version\Package\Support;
+namespace Pinixel\Version\Package\Support;
 
 use Carbon\Carbon;
-use PragmaRX\Version\Package\Version;
+use Pinixel\Version\Package\Version;
+use Pinixel\Version\Package\Exceptions\GitTagNotFound;
 
 class Absorb
 {
     /**
      * @var Config
      */
-    protected $config;
+    protected Config $config;
 
     /**
      * @var Git
      */
-    protected $git;
+    protected Git $git;
 
     /**
      * @var Timestamp
      */
-    protected $timestamp;
+    protected Timestamp $timestamp;
 
     /**
      * @var Version
      */
-    protected $version;
+    protected Version $version;
 
     /**
      * Absorb constructor.
      *
-     * @param Config
-     * @param Git
+     * @param  Config
+     * @param  Git
+     * @param  Timestamp  $timestamp
+     * @param  Version  $version
      */
     public function __construct(Config $config, Git $git, Timestamp $timestamp, Version $version)
     {
@@ -47,11 +50,10 @@ class Absorb
     /**
      * Get a properly formatted version.
      *
-     * @param bool $force
-     *
      * @return bool
+     * @throws GitTagNotFound
      */
-    public function absorb()
+    public function absorb(): bool
     {
         $this->absorbVersion();
 
@@ -66,8 +68,10 @@ class Absorb
 
     /**
      * Absorb the version number from git.
+     * @throws GitTagNotFound
+     * @throws \Exception
      */
-    protected function absorbVersion()
+    protected function absorbVersion(): void
     {
         if (!$this->version->isVersionInAbsorbMode()) {
             return;
@@ -97,7 +101,7 @@ class Absorb
     /**
      * Absorb the commit from git.
      */
-    protected function absorbCommit()
+    protected function absorbCommit(): void
     {
         if (!$this->version->isBuildInAbsorbMode()) {
             return;
@@ -113,7 +117,7 @@ class Absorb
     /**
      * Absorb the commit from git.
      */
-    protected function absorbTimestamp()
+    protected function absorbTimestamp(): void
     {
         if (!$this->version->isTimestampInAbsorbMode()) {
             return;
@@ -131,7 +135,7 @@ class Absorb
     /**
      * Fire absorbed event.
      */
-    public function fireEvent()
+    public function fireEvent(): void
     {
         event(Constants::EVENT_VERSION_ABSORBED);
     }

@@ -1,57 +1,59 @@
 <?php
 
-namespace PragmaRX\Version\Package;
+namespace Pinixel\Version\Package;
 
+use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
-use PragmaRX\Version\Package\Exceptions\MethodNotFound;
-use PragmaRX\Version\Package\Support\Absorb;
-use PragmaRX\Version\Package\Support\Config;
-use PragmaRX\Version\Package\Support\Constants;
-use PragmaRX\Version\Package\Support\Git;
-use PragmaRX\Version\Package\Support\Increment;
-use PragmaRX\Version\Package\Support\Timestamp;
+use Pinixel\Version\Package\Support\Absorb;
+use Pinixel\Version\Package\Support\Config;
+use Pinixel\Version\Package\Support\Git;
+use Pinixel\Version\Package\Support\Increment;
+use Pinixel\Version\Package\Support\Timestamp;
+use Pinixel\Version\Package\Exceptions\MethodNotFound;
+use Pinixel\Version\Package\Support\Constants;
 use PragmaRX\Yaml\Package\Yaml;
 
 class Version
 {
     /**
-     * @var \PragmaRX\Yaml\Package\Yaml
+     * @var Yaml
      */
-    protected $yaml;
+    protected Yaml $yaml;
 
     /**
-     * @var \PragmaRX\Version\Package\Support\Config
+     * @var Config
      */
-    protected $config;
+    protected Config $config;
 
     /**
-     * @var \PragmaRX\Version\Package\Support\Git
+     * @var Git
      */
-    protected $git;
+    protected Git $git;
 
     /**
-     * @var \PragmaRX\Version\Package\Support\Increment
+     * @var Increment
      */
-    protected $increment;
+    protected Increment $increment;
 
     /**
      * @var Absorb
      */
-    private $absorb;
+    private Absorb $absorb;
 
     /**
      * @var Timestamp
      */
-    private $timestamp;
+    private Timestamp $timestamp;
 
     /**
      * Version constructor.
      *
-     * @param Config|null    $config
-     * @param Git|null       $git
-     * @param Increment|null $increment
-     * @param Yaml           $yaml
-     * @param Absorb|null    $absorb
+     * @param  Config|null  $config
+     * @param  Git|null  $git
+     * @param  Increment|null  $increment
+     * @param  Yaml|null  $yaml
+     * @param  Absorb|null  $absorb
+     * @param  Timestamp|null  $timestamp
      */
     public function __construct(
         Config $config = null,
@@ -104,7 +106,7 @@ class Version
      *
      * @return string
      */
-    protected function getCurrent($type)
+    protected function getCurrent($type): ?string
     {
         return $this->config->has("current.{$type}") ? ($this->config->get("current.{$type}") ?? '') : null;
     }
@@ -114,9 +116,9 @@ class Version
      *
      * @param $type
      *
-     * @return string
+     * @return Git
      */
-    public function getGit()
+    public function getGit(): Git
     {
         return $this->git;
     }
@@ -128,6 +130,8 @@ class Version
      * @param $git
      * @param $increment
      * @param $yaml
+     * @param $absorb
+     * @param $timestamp
      */
     protected function instantiate(
         $config,
@@ -136,7 +140,7 @@ class Version
         $yaml,
         $absorb,
         $timestamp
-    ) {
+    ): void {
         $yaml = $this->instantiateClass($yaml ?: app('pragmarx.yaml'), 'yaml');
 
         $config = $this->instantiateClass($config, 'config', Config::class, [
@@ -167,16 +171,16 @@ class Version
      * Instantiate a class.
      *
      * @param $instance  object
-     * @param $property  string
-     * @param $class     string
-     *
-     * @return Yaml|object
+     * @param  $property  string
+     * @param  null  $class  string|null
+     * @param  array  $arguments
+     * @return Yaml
      */
     protected function instantiateClass(
         $instance,
-        $property,
+       $property,
         $class = null,
-        $arguments = []
+        array $arguments = []
     ) {
         return $this->{$property} = is_null($instance)
             ? ($instance = new $class(...$arguments))
@@ -190,7 +194,7 @@ class Version
      *
      * @return mixed
      */
-    protected function replaceVariables($string)
+    protected function replaceVariables($string): mixed
     {
         do {
             $original = $string;
@@ -208,7 +212,7 @@ class Version
      *
      * @return mixed
      */
-    protected function searchAndReplaceVariables($string)
+    protected function searchAndReplaceVariables($string): mixed
     {
         while (preg_match('/(\{\$(.*)\})/U', $string, $matches)) {
             $old = $string;
@@ -244,7 +248,7 @@ class Version
      *
      * @return string
      */
-    public function current()
+    public function current(): string
     {
         return $this->replaceVariables($this->config->get('format.version'));
     }
@@ -254,7 +258,7 @@ class Version
      *
      * @return $this
      */
-    public function instance()
+    public function instance(): static
     {
         return $this;
     }
@@ -266,13 +270,15 @@ class Version
      *
      * @return mixed|null
      */
-    public function format($type = null)
+    public function format($type = null): mixed
     {
         $type = $type ?: Constants::DEFAULT_FORMAT;
 
         if (!is_null($value = $this->config->get("format.{$type}"))) {
             return $this->replaceVariables($value);
         }
+
+        return null;
     }
 
     /**
@@ -282,7 +288,7 @@ class Version
      *
      * @return bool
      */
-    public function isInAbsorbMode()
+    public function isInAbsorbMode(): bool
     {
         return $this->isVersionInAbsorbMode() ||
             $this->isBuildInAbsorbMode() ||
@@ -296,7 +302,7 @@ class Version
      *
      * @return bool
      */
-    public function isVersionInAbsorbMode()
+    public function isVersionInAbsorbMode(): bool
     {
         return $this->config->get('mode') == Constants::MODE_ABSORB;
     }
@@ -308,7 +314,7 @@ class Version
      *
      * @return bool
      */
-    public function isBuildInAbsorbMode()
+    public function isBuildInAbsorbMode(): bool
     {
         return $this->config->get('commit.mode') == Constants::MODE_ABSORB;
     }
@@ -320,7 +326,7 @@ class Version
      *
      * @return bool
      */
-    public function isTimestampInAbsorbMode()
+    public function isTimestampInAbsorbMode(): bool
     {
         return $this->config->get('current.timestamp.mode') == Constants::MODE_ABSORB;
     }
@@ -328,9 +334,9 @@ class Version
     /**
      * Set the config file stub.
      *
-     * @param string $configFileStub
+     * @param  string  $configFileStub
      */
-    public function setConfigFileStub($configFileStub)
+    public function setConfigFileStub(string $configFileStub): void
     {
         $this->config->setConfigFileStub($configFileStub);
     }
@@ -340,9 +346,9 @@ class Version
      *
      * @param $path
      *
-     * @return \Illuminate\Support\Collection
+     * @return Collection
      */
-    public function loadConfig($path = null)
+    public function loadConfig($path = null): Collection
     {
         return $this->config->loadConfig($path);
     }
