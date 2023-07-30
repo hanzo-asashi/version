@@ -103,7 +103,7 @@ class Git
      *
      * @return string
      */
-    public function getTimestamp(string|null $from = null)
+    public function getTimestamp(string|null $from = null): bool|string|null
     {
         return $this->getFromGit(
             $this->makeGitTimestampRetrieverCommand($from)

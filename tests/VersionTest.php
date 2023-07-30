@@ -218,7 +218,7 @@ class VersionTest extends TestCase
     {
         $this->assertEquals(
             $this->getFormattedVersion('version %s.%s.%s (commit %s)'),
-            app('pragmarx.version')->format('full')
+            app('pinixel.version')->format('full')
         );
     }
 
