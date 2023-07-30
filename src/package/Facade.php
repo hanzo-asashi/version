@@ -1,6 +1,6 @@
 <?php
 
-namespace PragmaRX\Version\Package;
+namespace Pinixel\Version\Package;
 
 use Illuminate\Support\Facades\Facade as LaravelFacade;
 
@@ -11,8 +11,8 @@ class Facade extends LaravelFacade
      *
      * @return string
      */
-    protected static function getFacadeAccessor()
+    protected static function getFacadeAccessor(): string
     {
-        return 'pragmarx.version';
+        return 'pinixel.version';
     }
 }

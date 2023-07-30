@@ -1,5 +1,5 @@
 {
-    "name": "pragmarx/version",
+    "name": "pinixel/version",
     "description": "Take control over your Laravel app version",
     "keywords": [
         "laravel",
@@ -9,9 +9,9 @@
     "license": "MIT",
     "authors": [
         {
-            "name": "Antonio Carlos Ribeiro",
-            "email": "acr@antoniocarlosribeiro.com",
-            "role": "Creator & Designer"
+            "name": "Hansen Makangiras",
+            "email": "hansenmakangiras@gmail.com",
+            "role": "Web Developer"
         }
     ],
     "require": {
@@ -26,18 +26,18 @@
     },
     "autoload": {
         "psr-4": {
-            "PragmaRX\\Version\\Package\\": "src/package",
-            "PragmaRX\\Version\\Tests\\": "tests/"
+            "Pinixel\\Version\\Package\\": "src/package",
+            "Pinixel\\Version\\Tests\\": "tests/"
         }
     },
     "extra": {
         "component": "package",
         "laravel": {
             "providers": [
-                "PragmaRX\\Version\\Package\\ServiceProvider"
+                "Pinixel\\Version\\Package\\ServiceProvider"
             ],
             "aliases": {
-                "Version": "PragmaRX\\Version\\Package\\Facade"
+                "Version": "Pinixel\\Version\\Package\\Facade"
             }
         }
     },

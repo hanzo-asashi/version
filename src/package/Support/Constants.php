@@ -1,6 +1,6 @@
 <?php
 
-namespace PragmaRX\Version\Package\Support;
+namespace Pinixel\Version\Package\Support;
 
 class Constants
 {
@@ -31,4 +31,5 @@ class Constants
     const EVENT_PATCH_INCREMENTED = 'pragmarx:version:events:patch-incremented';
 
     const EVENT_TIMESTAMP_UPDATED = 'pragmarx:version:events:timestamp-updated';
+    const BUILD_CACHE_KEY = 'build';
 }

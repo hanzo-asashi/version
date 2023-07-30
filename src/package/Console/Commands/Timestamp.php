@@ -1,6 +1,6 @@
 <?php
 
-namespace PragmaRX\Version\Package\Console\Commands;
+namespace Pinixel\Version\Package\Console\Commands;
 
 class Timestamp extends Base
 {
@@ -21,10 +21,10 @@ class Timestamp extends Base
     /**
      * Execute the console command.
      */
-    public function handle()
+    public function handle(): void
     {
         if ($this->checkIfCanIncrement('current', 'timestamp')) {
-            $number = app('pragmarx.version')->timestampToConfig();
+            $number = app('pinixel.version')->timestampToConfig();
 
             $this->info("New timestamp: {$number}");
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace PragmaRX\Version\Package\Support;
+namespace Pinixel\Version\Package\Support;
 
 use Illuminate\Support\Collection;
 use PragmaRX\Yaml\Package\Yaml;
@@ -12,21 +12,21 @@ class Config
      *
      * @var \PragmaRX\Yaml\Package\Yaml
      */
-    protected $yaml;
+    protected ?Yaml $yaml;
 
     /**
      * The config file stub.
      *
      * @var string
      */
-    protected $configFileStub;
+    protected string $configFileStub;
 
     /**
      * The config file.
      *
      * @var string
      */
-    protected $configFile;
+    protected string $configFile;
 
     /**
      * Cache constructor.
@@ -42,11 +42,11 @@ class Config
      * Get config value.
      *
      * @param $string
-     * @param mixed|null $default
+     * @param  mixed|null  $default
      *
      * @return \Illuminate\Config\Repository|mixed
      */
-    public function get($string, $default = null)
+    public function get($string, mixed $default = null): mixed
     {
         return config("version.{$string}", $default);
     }
@@ -54,11 +54,11 @@ class Config
     /**
      * Get config root.
      *
-     * @return \Illuminate\Config\Repository|mixed
+     * @return array
      *
      * @internal param $string
      */
-    public function getRoot()
+    public function getRoot(): array
     {
         return collect(config('version'))->toArray();
     }
@@ -69,9 +69,9 @@ class Config
      * @param $string
      * @param mixed|null $default
      *
-     * @return \Illuminate\Config\Repository|mixed
+     * @return bool
      */
-    public function has($string)
+    public function has($string): bool
     {
         return config()->has("version.{$string}");
     }
@@ -81,7 +81,7 @@ class Config
      *
      * @return string
      */
-    public function getConfigFileStub()
+    public function getConfigFileStub(): string
     {
         return $this->configFileStub;
     }
@@ -91,9 +91,9 @@ class Config
      *
      * @param $path
      *
-     * @return mixed
+     * @return Collection
      */
-    protected function loadToLaravelConfig($path)
+    protected function loadToLaravelConfig($path): Collection
     {
         return $this->yaml->loadToConfig($path, 'version');
     }
@@ -101,9 +101,9 @@ class Config
     /**
      * Set the config file stub.
      *
-     * @param string $configFileStub
+     * @param  string  $configFileStub
      */
-    public function setConfigFileStub($configFileStub)
+    public function setConfigFileStub(string $configFileStub): void
     {
         $this->configFileStub = $configFileStub;
     }
@@ -115,7 +115,7 @@ class Config
      *
      * @return Collection
      */
-    public function loadConfig($config = null)
+    public function loadConfig($config = null): Collection
     {
         $config =
             !is_null($config) || !file_exists($this->configFile)
@@ -128,11 +128,11 @@ class Config
     /**
      * Get the config file path.
      *
-     * @param string|null $file
+     * @param  string|null  $file
      *
      * @return string
      */
-    public function getConfigFile($file = null)
+    public function getConfigFile(string $file = null): string
     {
         $file = $file ?: $this->configFile;
 
@@ -144,7 +144,7 @@ class Config
      *
      * @param $config
      */
-    public function update($config)
+    public function update($config): void
     {
         config(['version' => $config]);
 
@@ -158,7 +158,7 @@ class Config
      *
      * @return mixed
      */
-    public function setConfigFile($file)
+    public function setConfigFile($file): mixed
     {
         return $this->configFile = $file;
     }

@@ -1,15 +1,15 @@
 <?php
 
-namespace PragmaRX\Version\Package;
+namespace Pinixel\Version\Package;
 
 use Illuminate\Support\Str;
+use Pinixel\Version\Package\Support\Absorb;
+use Pinixel\Version\Package\Support\Config;
+use Pinixel\Version\Package\Support\Git;
+use Pinixel\Version\Package\Support\Increment;
+use Pinixel\Version\Package\Support\Timestamp;
 use PragmaRX\Version\Package\Exceptions\MethodNotFound;
-use PragmaRX\Version\Package\Support\Absorb;
-use PragmaRX\Version\Package\Support\Config;
-use PragmaRX\Version\Package\Support\Constants;
-use PragmaRX\Version\Package\Support\Git;
-use PragmaRX\Version\Package\Support\Increment;
-use PragmaRX\Version\Package\Support\Timestamp;
+use Pinixel\Version\Package\Support\Constants;
 use PragmaRX\Yaml\Package\Yaml;
 
 class Version
@@ -17,41 +17,42 @@ class Version
     /**
      * @var \PragmaRX\Yaml\Package\Yaml
      */
-    protected $yaml;
+    protected Yaml $yaml;
 
     /**
-     * @var \PragmaRX\Version\Package\Support\Config
+     * @var Config
      */
-    protected $config;
+    protected Config $config;
 
     /**
-     * @var \PragmaRX\Version\Package\Support\Git
+     * @var Git
      */
-    protected $git;
+    protected Git $git;
 
     /**
-     * @var \PragmaRX\Version\Package\Support\Increment
+     * @var Increment
      */
-    protected $increment;
+    protected Increment $increment;
 
     /**
      * @var Absorb
      */
-    private $absorb;
+    private Absorb $absorb;
 
     /**
      * @var Timestamp
      */
-    private $timestamp;
+    private Timestamp $timestamp;
 
     /**
      * Version constructor.
      *
-     * @param Config|null    $config
-     * @param Git|null       $git
-     * @param Increment|null $increment
-     * @param Yaml           $yaml
-     * @param Absorb|null    $absorb
+     * @param  Config|null  $config
+     * @param  Git|null  $git
+     * @param  Increment|null  $increment
+     * @param  Yaml|null  $yaml
+     * @param  Absorb|null  $absorb
+     * @param  Timestamp|null  $timestamp
      */
     public function __construct(
         Config $config = null,
@@ -104,7 +105,7 @@ class Version
      *
      * @return string
      */
-    protected function getCurrent($type)
+    protected function getCurrent($type): ?string
     {
         return $this->config->has("current.{$type}") ? ($this->config->get("current.{$type}") ?? '') : null;
     }
@@ -114,9 +115,9 @@ class Version
      *
      * @param $type
      *
-     * @return string
+     * @return Git
      */
-    public function getGit()
+    public function getGit(): Git
     {
         return $this->git;
     }
@@ -128,6 +129,8 @@ class Version
      * @param $git
      * @param $increment
      * @param $yaml
+     * @param $absorb
+     * @param $timestamp
      */
     protected function instantiate(
         $config,
@@ -136,7 +139,7 @@ class Version
         $yaml,
         $absorb,
         $timestamp
-    ) {
+    ): void {
         $yaml = $this->instantiateClass($yaml ?: app('pragmarx.yaml'), 'yaml');
 
         $config = $this->instantiateClass($config, 'config', Config::class, [

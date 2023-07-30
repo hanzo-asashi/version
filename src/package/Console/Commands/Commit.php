@@ -1,6 +1,6 @@
 <?php
 
-namespace PragmaRX\Version\Package\Console\Commands;
+namespace Pinixel\Version\Package\Console\Commands;
 
 class Commit extends Base
 {
@@ -21,10 +21,10 @@ class Commit extends Base
     /**
      * Execute the console command.
      */
-    public function handle()
+    public function handle(): void
     {
         if ($this->checkIfCanIncrement('current', 'build')) {
-            $commit = app('pragmarx.version')->incrementCommit(
+            $commit = app('pinixel.version')->incrementCommit(
                 $this->option('increment-by')
             );
 

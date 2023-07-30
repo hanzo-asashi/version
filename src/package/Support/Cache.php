@@ -1,12 +1,12 @@
 <?php
 
-namespace PragmaRX\Version\Package\Support;
+namespace Pinixel\Version\Package\Support;
 
 use Illuminate\Support\Facades\Cache as IlluminateCache;
 
 class Cache
 {
-    protected $config;
+    protected ?Config $config;
 
     /**
      * Cache constructor.
@@ -23,9 +23,9 @@ class Cache
      *
      * @param $key
      * @param $value
-     * @param int $minutes
+     * @param  int  $minutes
      */
-    public function put($key, $value, $minutes = 10)
+    public function put($key, $value, int $minutes = 10): void
     {
         IlluminateCache::put(
             $key,
@@ -41,7 +41,7 @@ class Cache
      *
      * @return null|mixed
      */
-    public function get($key)
+    public function get($key): mixed
     {
         return $this->config->get('cache.enabled')
             ? IlluminateCache::get($key)
@@ -55,7 +55,7 @@ class Cache
      *
      * @return string
      */
-    public function key($string)
+    public function key($string): string
     {
         return $this->config->get('cache.key').'-'.$string;
     }
@@ -63,7 +63,7 @@ class Cache
     /**
      * Get the current object instance.
      */
-    public function flush()
+    public function flush(): void
     {
         IlluminateCache::forget($this->key(Constants::BUILD_CACHE_KEY));
 

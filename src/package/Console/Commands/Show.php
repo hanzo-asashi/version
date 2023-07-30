@@ -1,6 +1,6 @@
 <?php
 
-namespace PragmaRX\Version\Package\Console\Commands;
+namespace Pinixel\Version\Package\Console\Commands;
 
 class Show extends Base
 {
@@ -21,7 +21,7 @@ class Show extends Base
     /**
      * Execute the console command.
      */
-    public function handle()
+    public function handle(): void
     {
         $format = $this->option('format') ?: 'full';
 
@@ -29,6 +29,6 @@ class Show extends Base
             ? ''
             : config('app.name').' ';
 
-        $this->info($appName.app('pragmarx.version')->format($format));
+        $this->info($appName.app('pinixel.version')->format($format));
     }
 }
