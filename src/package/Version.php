@@ -9,14 +9,14 @@ use Pinixel\Version\Package\Support\Config;
 use Pinixel\Version\Package\Support\Git;
 use Pinixel\Version\Package\Support\Increment;
 use Pinixel\Version\Package\Support\Timestamp;
-use PragmaRX\Version\Package\Exceptions\MethodNotFound;
+use Pinixel\Version\Package\Exceptions\MethodNotFound;
 use Pinixel\Version\Package\Support\Constants;
 use PragmaRX\Yaml\Package\Yaml;
 
 class Version
 {
     /**
-     * @var \PragmaRX\Yaml\Package\Yaml
+     * @var Yaml
      */
     protected Yaml $yaml;
 
@@ -171,16 +171,16 @@ class Version
      * Instantiate a class.
      *
      * @param $instance  object
-     * @param $property  string
-     * @param $class     string|null
-     *
-     * @return Yaml|object
+     * @param  $property  string
+     * @param  null  $class  string|null
+     * @param  array  $arguments
+     * @return Yaml
      */
     protected function instantiateClass(
         $instance,
-        $property,
+       $property,
         $class = null,
-        $arguments = []
+        array $arguments = []
     ) {
         return $this->{$property} = is_null($instance)
             ? ($instance = new $class(...$arguments))
@@ -194,7 +194,7 @@ class Version
      *
      * @return mixed
      */
-    protected function replaceVariables($string)
+    protected function replaceVariables($string): mixed
     {
         do {
             $original = $string;
@@ -212,7 +212,7 @@ class Version
      *
      * @return mixed
      */
-    protected function searchAndReplaceVariables($string)
+    protected function searchAndReplaceVariables($string): mixed
     {
         while (preg_match('/(\{\$(.*)\})/U', $string, $matches)) {
             $old = $string;
@@ -277,6 +277,8 @@ class Version
         if (!is_null($value = $this->config->get("format.{$type}"))) {
             return $this->replaceVariables($value);
         }
+
+        return null;
     }
 
     /**

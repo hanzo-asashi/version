@@ -4,7 +4,7 @@ namespace Pinixel\Version\Package\Support;
 
 use Carbon\Carbon;
 use Pinixel\Version\Package\Version;
-use PragmaRX\Version\Package\Exceptions\GitTagNotFound;
+use Pinixel\Version\Package\Exceptions\GitTagNotFound;
 
 class Absorb
 {

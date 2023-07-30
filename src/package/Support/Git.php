@@ -3,7 +3,7 @@
 namespace Pinixel\Version\Package\Support;
 
 use Exception;
-use PragmaRX\Version\Package\Exceptions\GitTagNotFound;
+use Pinixel\Version\Package\Exceptions\GitTagNotFound;
 use Symfony\Component\Process\Process;
 
 class Git
