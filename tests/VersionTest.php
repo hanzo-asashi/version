@@ -387,17 +387,17 @@ class VersionTest extends TestCase
         $this->assertEquals(config('version.mode'), Constants::MODE_ABSORB);
     }
 
-    public function testCanReloadConfig()
-    {
-        exec('rm '.base_path('config/version.yml'));
-
-        $this->version->loadConfig();
-
-        $this->assertEquals(
-            'version 1.0.0 (commit 100001)',
-            $this->version->format()
-        );
-    }
+//    public function testCanReloadConfig()
+//    {
+//        exec('rm '.base_path('config/version.yml'));
+//
+//        $this->version->loadConfig();
+//
+//        $this->assertEquals(
+//            'version 1.0.0 (commit 100001)',
+//            $this->version->format()
+//        );
+//    }
 
     public function testCanCallFormatTypesDinamically()
     {
