@@ -40,7 +40,7 @@ class VersionTest extends TestCase
         $this->createGitTag();
 
         putenv(
-            'VERSION_GIT_REMOTE_REPOSITORY=https://github.com/antonioribeiro/version.git'
+            'VERSION_GIT_REMOTE_REPOSITORY=https://github.com/hanzo-asashi/version.git'
         );
 
         $this->version = VersionFacade::instance();
@@ -50,7 +50,7 @@ class VersionTest extends TestCase
         $this->version->current(); // load config
     }
 
-    protected function createGitTag($version = '0.1.1')
+    protected function createGitTag($version = '0.1.1'): void
     {
         if ($this->currentVersion === $version) {
             return;
@@ -94,7 +94,7 @@ class VersionTest extends TestCase
 
         return static::$remoteVersion = substr(
             exec(
-                'git ls-remote https://github.com/antonioribeiro/version.git | grep tags/ | grep -v {} | cut -d \/ -f 3 | cut -d v -f 2 | sort --version-sort | tail -1'
+                'git ls-remote https://github.com/hanzo-asashi/version.git | grep tags/ | grep -v {} | cut -d \/ -f 3 | cut -d v -f 2 | sort --version-sort | tail -1'
             ),
             0,
             6
